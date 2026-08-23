@@ -10,6 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StudentDTO {
+    private Long id;
     private UserDTO user;
     private String matricula;
 }

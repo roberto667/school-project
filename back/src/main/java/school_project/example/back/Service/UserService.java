@@ -7,17 +7,17 @@ import school_project.example.back.DTO.TeacherDTO;
 import school_project.example.back.DTO.UserDTO;
 
 public interface UserService {
-    UserService createStudent(StudentDTO studentDTO);
+    StudentDTO createStudent(StudentDTO studentDTO);
 
-    UserService createTeacher(TeacherDTO teacherDTO);
+    TeacherDTO createTeacher(TeacherDTO teacherDTO);
 
-    UserService getStudent(Long userid);
+    StudentDTO getStudent(Long studentId);
 
-    UserService getTecaher(Long userid);
+    TeacherDTO getTeacher(Long teacherId);
 
     List<StudentDTO> getAllStudents();
 
-    List<TeacherDTO> getAllTecahers();
+    List<TeacherDTO> getAllTeachers();
 
     UserDTO updateUser(Long userId, UserDTO updateUser);
 

@@ -1,0 +1,58 @@
+package school_project.example.back.Service.impl;
+
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Service;
+
+import lombok.RequiredArgsConstructor;
+import school_project.example.back.DTO.LoginRequestDTO;
+import school_project.example.back.DTO.LoginResponseDTO;
+import school_project.example.back.Entity.User;
+import school_project.example.back.Exception.InvalidCredentialsException;
+import school_project.example.back.Mapper.UserMapper;
+import school_project.example.back.Repository.UserRepository;
+import school_project.example.back.Security.CustomUserDetailsService;
+import school_project.example.back.Security.JwtService;
+import school_project.example.back.Service.AuthService;
+
+@Service
+@RequiredArgsConstructor
+public class AuthServiceImpl implements AuthService {
+
+    private final AuthenticationManager authenticationManager;
+    private final UserRepository userRepository;
+    private final CustomUserDetailsService userDetailsService;
+    private final JwtService jwtService;
+
+    @Override
+    public LoginResponseDTO login(LoginRequestDTO loginRequestDTO) {
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            loginRequestDTO.getEmail(),
+                            loginRequestDTO.getPassword()));
+        } catch (BadCredentialsException ex) {
+            throw new InvalidCredentialsException("Email ou senha inválidos");
+        }
+
+        User user = userRepository.findByEmail(loginRequestDTO.getEmail())
+                .orElseThrow(() -> new InvalidCredentialsException("Email ou senha inválidos"));
+
+        UserDetails userDetails = userDetailsService.loadUserByUsername(user.getEmail());
+        String token = jwtService.generateToken(userDetails);
+
+        String role = "NONE";
+        if (user.getTeacher() != null)
+            role = "TEACHER";
+        else if (user.getStudent() != null)
+            role = "STUDENT";
+
+        LoginResponseDTO response = new LoginResponseDTO();
+        response.setToken(token);
+        response.setUser(UserMapper.maptoUserResponseDTO(user));
+        response.setRole(role);
+        return response;
+    }
+}

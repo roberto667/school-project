@@ -26,7 +26,7 @@ public class User {
     @Column(name = "email_id", nullable = false, unique = true)
     private String email;
 
-    @Column(name = "password", nullable = false, columnDefinition = "VARCHAR(255) CHECK (LENGTH(password) >= 8)")
+    @Column(name = "password", nullable = false)
     private String password;
     // Dentro da sua classe User atual, adicione este campo:
     @OneToOne(mappedBy = "user")
