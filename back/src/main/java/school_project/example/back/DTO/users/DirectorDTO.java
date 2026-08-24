@@ -1,4 +1,4 @@
-package school_project.example.back.DTO;
+package school_project.example.back.DTO.users;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class TeacherDTO {
+public class DirectorDTO {
     private Long id;
     private UserDTO user;
     private String matricula;

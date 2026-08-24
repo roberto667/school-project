@@ -44,7 +44,9 @@ public class AuthServiceImpl implements AuthService {
         String token = jwtService.generateToken(userDetails);
 
         String role = "NONE";
-        if (user.getTeacher() != null)
+        if (user.getDirector() != null)
+            role = "DIRECTOR";
+        else if (user.getTeacher() != null)
             role = "TEACHER";
         else if (user.getStudent() != null)
             role = "STUDENT";

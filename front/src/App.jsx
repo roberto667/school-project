@@ -4,6 +4,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import LoginPage from "./pages/LoginPage";
 import TeacherPage from "./pages/TeacherPage";
 import StudentPage from "./pages/StudentPage";
+import DirectorPage from "./pages/DirectorPage";
 
 export default function App() {
   return (
@@ -26,6 +27,14 @@ export default function App() {
             element={
               <PrivateRoute allowedRole="STUDENT">
                 <StudentPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/director"
+            element={
+              <PrivateRoute allowedRole="DIRECTOR">
+                <DirectorPage />
               </PrivateRoute>
             }
           />

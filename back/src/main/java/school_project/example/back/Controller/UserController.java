@@ -16,9 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import school_project.example.back.DTO.StudentDTO;
-import school_project.example.back.DTO.TeacherDTO;
-import school_project.example.back.DTO.UserDTO;
+import school_project.example.back.DTO.users.DirectorDTO;
+import school_project.example.back.DTO.users.StudentDTO;
+import school_project.example.back.DTO.users.TeacherDTO;
+import school_project.example.back.DTO.users.UserDTO;
 import school_project.example.back.Service.UserService;
 
 @CrossOrigin("*")
@@ -66,6 +67,25 @@ public class UserController {
     public ResponseEntity<List<TeacherDTO>> getAllTeachers() {
         List<TeacherDTO> teachers = userService.getAllTeachers();
         return ResponseEntity.ok(teachers);
+    }
+    // ---------- DIRECTOR ----------
+
+    @PostMapping("/directors")
+    public ResponseEntity<DirectorDTO> createDirector(@Valid @RequestBody DirectorDTO directorDTO) {
+        DirectorDTO created = userService.createDirector(directorDTO);
+        return new ResponseEntity<>(created, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/directors/{id}")
+    public ResponseEntity<DirectorDTO> getDirector(@PathVariable Long id) {
+        DirectorDTO director = userService.getDirector(id);
+        return ResponseEntity.ok(director);
+    }
+
+    @GetMapping("/directors")
+    public ResponseEntity<List<DirectorDTO>> getAllDirectors() {
+        List<DirectorDTO> directors = userService.getAllDirectors();
+        return ResponseEntity.ok(directors);
     }
 
     // ---------- USER (genérico) ----------

@@ -1,6 +1,6 @@
 package school_project.example.back.Mapper;
 
-import school_project.example.back.DTO.StudentDTO;
+import school_project.example.back.DTO.users.StudentDTO;
 import school_project.example.back.Entity.Student;
 
 public class StudentMapper {

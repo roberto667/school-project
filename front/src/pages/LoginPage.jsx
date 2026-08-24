@@ -21,12 +21,14 @@ export default function LoginPage() {
       const data = await login(email, password);
       signIn(data);
 
-      if (data.role === "TEACHER") {
+      if (data.role === "DIRECTOR") {
+        navigate("/director");
+      } else if (data.role === "TEACHER") {
         navigate("/teacher");
       } else if (data.role === "STUDENT") {
         navigate("/student");
       } else {
-        setError("Usuário sem papel definido (nem professor, nem aluno).");
+        setError("Usuário sem papel definido.");
       }
     } catch (err) {
       setError(err.message);

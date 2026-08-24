@@ -1,7 +1,7 @@
 package school_project.example.back.Mapper;
 
-import school_project.example.back.DTO.UserDTO;
-import school_project.example.back.DTO.UserResponseDTO;
+import school_project.example.back.DTO.users.UserDTO;
+import school_project.example.back.DTO.users.UserResponseDTO;
 import school_project.example.back.Entity.User;
 
 public class UserMapper {

@@ -7,16 +7,20 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
-import school_project.example.back.DTO.StudentDTO;
-import school_project.example.back.DTO.TeacherDTO;
-import school_project.example.back.DTO.UserDTO;
+import school_project.example.back.DTO.users.DirectorDTO;
+import school_project.example.back.DTO.users.StudentDTO;
+import school_project.example.back.DTO.users.TeacherDTO;
+import school_project.example.back.DTO.users.UserDTO;
+import school_project.example.back.Entity.Director;
 import school_project.example.back.Entity.Student;
 import school_project.example.back.Entity.Teacher;
 import school_project.example.back.Entity.User;
 import school_project.example.back.Exception.ResourceNotFoundException;
+import school_project.example.back.Mapper.DirectorMapper;
 import school_project.example.back.Mapper.StudentMapper;
 import school_project.example.back.Mapper.TeacherMapper;
 import school_project.example.back.Mapper.UserMapper;
+import school_project.example.back.Repository.DirectorRepository;
 import school_project.example.back.Repository.StudentRepository;
 import school_project.example.back.Repository.TeacherRepository;
 import school_project.example.back.Repository.UserRepository;
@@ -29,29 +33,31 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final StudentRepository studentRepository;
     private final TeacherRepository teacherRepository;
-    private final PasswordEncoder passwordEncoder; // <- injetado
+    private final DirectorRepository directorRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public StudentDTO createStudent(StudentDTO studentDTO) {
         Student student = StudentMapper.maptoStudent(studentDTO);
-
-        // encripta a senha do usuário embutido antes de salvar
-        String rawPassword = student.getUser().getPassword();
-        student.getUser().setPassword(passwordEncoder.encode(rawPassword));
-
-        Student saved = studentRepository.save(student); // cascade salva o User junto
+        student.getUser().setPassword(passwordEncoder.encode(student.getUser().getPassword()));
+        Student saved = studentRepository.save(student);
         return StudentMapper.maptoStudentDTO(saved);
     }
 
     @Override
     public TeacherDTO createTeacher(TeacherDTO teacherDTO) {
         Teacher teacher = TeacherMapper.maptoTeacher(teacherDTO);
-
-        String rawPassword = teacher.getUser().getPassword();
-        teacher.getUser().setPassword(passwordEncoder.encode(rawPassword));
-
+        teacher.getUser().setPassword(passwordEncoder.encode(teacher.getUser().getPassword()));
         Teacher saved = teacherRepository.save(teacher);
         return TeacherMapper.maptoTeacherDTO(saved);
+    }
+
+    @Override
+    public DirectorDTO createDirector(DirectorDTO directorDTO) {
+        Director director = DirectorMapper.maptoDirector(directorDTO);
+        director.getUser().setPassword(passwordEncoder.encode(director.getUser().getPassword()));
+        Director saved = directorRepository.save(director);
+        return DirectorMapper.maptoDirectorDTO(saved);
     }
 
     @Override
@@ -69,6 +75,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public DirectorDTO getDirector(Long directorId) {
+        Director director = directorRepository.findById(directorId)
+                .orElseThrow(() -> new ResourceNotFoundException("Director não encontrado com id: " + directorId));
+        return DirectorMapper.maptoDirectorDTO(director);
+    }
+
+    @Override
     public List<StudentDTO> getAllStudents() {
         return studentRepository.findAll().stream()
                 .map(StudentMapper::maptoStudentDTO)
@@ -83,6 +96,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<DirectorDTO> getAllDirectors() {
+        return directorRepository.findAll().stream()
+                .map(DirectorMapper::maptoDirectorDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public UserDTO updateUser(Long userId, UserDTO updateUser) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User não encontrado com id: " + userId));
@@ -91,7 +111,6 @@ public class UserServiceImpl implements UserService {
         user.setLastName(updateUser.getLastName());
         user.setEmail(updateUser.getEmail());
 
-        // só reencripta se veio uma senha nova de fato
         if (updateUser.getPassword() != null && !updateUser.getPassword().isBlank()) {
             user.setPassword(passwordEncoder.encode(updateUser.getPassword()));
         }

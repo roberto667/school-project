@@ -26,13 +26,15 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado: " + email));
 
         List<GrantedAuthority> authorities = new ArrayList<>();
+        if (user.getDirector() != null) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_DIRECTOR"));
+        }
         if (user.getTeacher() != null) {
             authorities.add(new SimpleGrantedAuthority("ROLE_TEACHER"));
         }
         if (user.getStudent() != null) {
             authorities.add(new SimpleGrantedAuthority("ROLE_STUDENT"));
         }
-        // usuário sem vínculo nenhum ainda entra, só sem role específica
         if (authorities.isEmpty()) {
             authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
         }

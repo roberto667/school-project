@@ -1,4 +1,4 @@
-package school_project.example.back.DTO;
+package school_project.example.back.DTO.users;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
