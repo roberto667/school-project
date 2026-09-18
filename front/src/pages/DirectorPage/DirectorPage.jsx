@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 
-import CreateStudentForm from "../components/director/CreateStudentForm";
-import UpdateStudentForm from "../components/director/UpdateStudentForm";
-import CreateTeacherForm from "../components/director/CreateTeacherForm";
-import UpdateTeacherForm from "../components/director/UpdateTeacherForm";
-import DeleteForm from "../components/director/DeleteForm";
+import CreateStudentForm from "../../components/director/CreateStudentForm";
+import UpdateStudentForm from "../../components/director/UpdateStudentForm";
+import CreateTeacherForm from "../../components/director/CreateTeacherForm";
+import UpdateTeacherForm from "../../components/director/UpdateTeacherForm";
+import DeleteForm from "../../components/director/DeleteForm";
 
 export default function DirectorPage() {
   const { auth, signOut } = useAuth();

@@ -1,10 +1,10 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import PrivateRoute from "./components/PrivateRoute";
-import LoginPage from "./pages/LoginPage";
-import TeacherPage from "./pages/TeacherPage";
-import StudentPage from "./pages/StudentPage";
-import DirectorPage from "./pages/DirectorPage";
+import LoginPage from "./pages/LoginPage/LoginPage";
+import TeacherPage from "./pages/TeacherPage/TeacherPage";
+import StudentPage from "./pages/StudentPage/StudentPage";
+import DirectorPage from "./pages/DirectorPage/DirectorPage";
 
 export default function App() {
   return (
