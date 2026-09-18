@@ -20,6 +20,12 @@ public interface UserService {
 
     DirectorDTO getDirector(Long directorId);
 
+    StudentDTO getStudentByMatricula(String matricula);
+
+    TeacherDTO getTeacherByMatricula(String matricula);
+
+    DirectorDTO getDirectorByMatricula(String matricula);
+
     List<StudentDTO> getAllStudents();
 
     List<TeacherDTO> getAllTeachers();
@@ -28,6 +34,19 @@ public interface UserService {
 
     UserDTO updateUser(Long userId, UserDTO updateUser);
 
+    StudentDTO updateStudent(Long studentId, StudentDTO updateStudent);
+
+    StudentDTO updateStudentByMatricula(String matricula, StudentDTO updateStudent);
+
+    TeacherDTO updateTeacherByMatricula(String matricula, TeacherDTO updateTeacher);
+
+    DirectorDTO updateDirectorByMatricula(String matricula, DirectorDTO updateDirector);
+
     void deleteUser(Long userId);
 
+    void deleteStudentByMatricula(String matricula);
+
+    void deleteTeacherByMatricula(String matricula);
+
+    void deleteDirectorByMatricula(String matricula);
 }

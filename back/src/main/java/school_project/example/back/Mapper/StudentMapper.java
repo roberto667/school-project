@@ -8,21 +8,24 @@ public class StudentMapper {
         if (student == null)
             return null;
         StudentDTO dto = new StudentDTO();
+        dto.setId(student.getId());
         dto.setUser(UserMapper.maptoUserDTO(student.getUser()));
         dto.setMatricula(student.getMatricula());
-        dto.setId(student.getId());
+        dto.setGrau(student.getGrau());
+        dto.setAno(student.getAno());
         return dto;
     }
 
-    public static Student maptoStudent(StudentDTO studentDTO) {
-        if (studentDTO == null)
+    public static Student maptoStudent(StudentDTO dto) {
+        if (dto == null)
             return null;
         Student student = new Student();
-        student.setMatricula(studentDTO.getMatricula());
-        student.setUser(UserMapper.maptoUser(studentDTO.getUser()));
-        student.setId(studentDTO.getId());
+        student.setId(dto.getId());
+        student.setUser(UserMapper.maptoUser(dto.getUser()));
+        student.setMatricula(dto.getMatricula());
+        student.setGrau(dto.getGrau());
+        student.setAno(dto.getAno());
         return student;
-
     }
 
 }

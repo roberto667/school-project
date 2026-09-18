@@ -33,5 +33,6 @@ build/
 .vscode/
 ### variables ###
 .env
+school_project_model_db.brM3
 .env.*
 !.env.example

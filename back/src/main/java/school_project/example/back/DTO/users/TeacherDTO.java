@@ -13,4 +13,5 @@ public class TeacherDTO {
     private Long id;
     private UserDTO user;
     private String matricula;
+    private String disciplina; // ex: "Matemática", "Português"
 }

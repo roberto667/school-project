@@ -12,6 +12,7 @@ public class TeacherMapper {
         dto.setId(teacher.getId());
         dto.setUser(UserMapper.maptoUserDTO(teacher.getUser()));
         dto.setMatricula(teacher.getMatricula());
+        dto.setDisciplina(teacher.getDisciplina());
 
         return dto;
     }
@@ -24,6 +25,7 @@ public class TeacherMapper {
         teacher.setId(teacherDTO.getId());
         teacher.setMatricula(teacherDTO.getMatricula());
         teacher.setUser(UserMapper.maptoUser(teacherDTO.getUser()));
+        teacher.setDisciplina(teacherDTO.getDisciplina());
 
         return teacher;
 

@@ -20,6 +20,8 @@ public class Teacher {
 
     @Column(name = "matricula", nullable = false, unique = true)
     private String matricula;
+    @Column(name = "disciplina", nullable = false)
+    private String disciplina; // ex: "Matemática", "Português"
 
     // Aqui está a mágica da Chave Estrangeira:
     @OneToOne(cascade = CascadeType.ALL)

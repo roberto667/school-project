@@ -37,6 +37,12 @@ public class UserController {
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 
+    @PutMapping("/students/update/{id}")
+    public ResponseEntity<StudentDTO> updateStudent(@PathVariable Long id, @RequestBody StudentDTO studentDTO) {
+        StudentDTO updated = userService.updateStudent(id, studentDTO);
+        return ResponseEntity.ok(updated);
+    }
+
     @GetMapping("/students/{id}")
     public ResponseEntity<StudentDTO> getStudent(@PathVariable Long id) {
         StudentDTO student = userService.getStudent(id);
@@ -47,6 +53,27 @@ public class UserController {
     public ResponseEntity<List<StudentDTO>> getAllStudents() {
         List<StudentDTO> students = userService.getAllStudents();
         return ResponseEntity.ok(students);
+    }
+
+    // ---------- STUDENT (por matrícula) ----------
+
+    @GetMapping("/students/matricula/{matricula}")
+    public ResponseEntity<StudentDTO> getStudentByMatricula(@PathVariable String matricula) {
+        StudentDTO student = userService.getStudentByMatricula(matricula);
+        return ResponseEntity.ok(student);
+    }
+
+    @PutMapping("/students/matricula/{matricula}")
+    public ResponseEntity<StudentDTO> updateStudentByMatricula(
+            @PathVariable String matricula, @RequestBody StudentDTO studentDTO) {
+        StudentDTO updated = userService.updateStudentByMatricula(matricula, studentDTO);
+        return ResponseEntity.ok(updated);
+    }
+
+    @DeleteMapping("/students/matricula/{matricula}")
+    public ResponseEntity<Void> deleteStudentByMatricula(@PathVariable String matricula) {
+        userService.deleteStudentByMatricula(matricula);
+        return ResponseEntity.noContent().build();
     }
 
     // ---------- TEACHER ----------
@@ -68,6 +95,28 @@ public class UserController {
         List<TeacherDTO> teachers = userService.getAllTeachers();
         return ResponseEntity.ok(teachers);
     }
+
+    // ---------- TEACHER (por matrícula) ----------
+
+    @GetMapping("/teachers/matricula/{matricula}")
+    public ResponseEntity<TeacherDTO> getTeacherByMatricula(@PathVariable String matricula) {
+        TeacherDTO teacher = userService.getTeacherByMatricula(matricula);
+        return ResponseEntity.ok(teacher);
+    }
+
+    @PutMapping("/teachers/matricula/{matricula}")
+    public ResponseEntity<TeacherDTO> updateTeacherByMatricula(
+            @PathVariable String matricula, @RequestBody TeacherDTO teacherDTO) {
+        TeacherDTO updated = userService.updateTeacherByMatricula(matricula, teacherDTO);
+        return ResponseEntity.ok(updated);
+    }
+
+    @DeleteMapping("/teachers/matricula/{matricula}")
+    public ResponseEntity<Void> deleteTeacherByMatricula(@PathVariable String matricula) {
+        userService.deleteTeacherByMatricula(matricula);
+        return ResponseEntity.noContent().build();
+    }
+
     // ---------- DIRECTOR ----------
 
     @PostMapping("/directors")
@@ -88,6 +137,27 @@ public class UserController {
         return ResponseEntity.ok(directors);
     }
 
+    // ---------- DIRECTOR (por matrícula) ----------
+
+    @GetMapping("/directors/matricula/{matricula}")
+    public ResponseEntity<DirectorDTO> getDirectorByMatricula(@PathVariable String matricula) {
+        DirectorDTO director = userService.getDirectorByMatricula(matricula);
+        return ResponseEntity.ok(director);
+    }
+
+    @PutMapping("/directors/matricula/{matricula}")
+    public ResponseEntity<DirectorDTO> updateDirectorByMatricula(
+            @PathVariable String matricula, @RequestBody DirectorDTO directorDTO) {
+        DirectorDTO updated = userService.updateDirectorByMatricula(matricula, directorDTO);
+        return ResponseEntity.ok(updated);
+    }
+
+    @DeleteMapping("/directors/matricula/{matricula}")
+    public ResponseEntity<Void> deleteDirectorByMatricula(@PathVariable String matricula) {
+        userService.deleteDirectorByMatricula(matricula);
+        return ResponseEntity.noContent().build();
+    }
+
     // ---------- USER (genérico) ----------
 
     @PutMapping("/update/{id}")
@@ -101,5 +171,4 @@ public class UserController {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
     }
-
 }
