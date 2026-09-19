@@ -1,6 +1,6 @@
 package school_project.example.back.Mapper;
 
-import school_project.example.back.DTO.NoteDTO;
+import school_project.example.back.DTO.Grade.NoteDTO;
 import school_project.example.back.Entity.Note;
 import school_project.example.back.Entity.Student;
 

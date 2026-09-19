@@ -7,8 +7,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
-import school_project.example.back.DTO.LoginRequestDTO;
-import school_project.example.back.DTO.LoginResponseDTO;
+import school_project.example.back.DTO.Login.LoginRequestDTO;
+import school_project.example.back.DTO.Login.LoginResponseDTO;
 import school_project.example.back.Entity.User;
 import school_project.example.back.Exception.InvalidCredentialsException;
 import school_project.example.back.Mapper.UserMapper;

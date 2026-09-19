@@ -8,9 +8,9 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import school_project.example.back.DTO.users.DirectorDTO;
-import school_project.example.back.DTO.users.StudentDTO;
 import school_project.example.back.DTO.users.TeacherDTO;
-import school_project.example.back.DTO.users.UserDTO;
+import school_project.example.back.DTO.users.Student.StudentRequestDTO;
+import school_project.example.back.DTO.users.User.UserDTO;
 import school_project.example.back.Entity.Director;
 import school_project.example.back.Entity.Student;
 import school_project.example.back.Entity.Teacher;
@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
     // ---------- CREATE ----------
 
     @Override
-    public StudentDTO createStudent(StudentDTO studentDTO) {
+    public StudentRequestDTO createStudent(StudentRequestDTO studentDTO) {
         validarAnoParaGrau(studentDTO.getGrau(), studentDTO.getAno());
 
         studentDTO.getUser().setPassword(
@@ -71,7 +71,7 @@ public class UserServiceImpl implements UserService {
     // ---------- GET POR ID ----------
 
     @Override
-    public StudentDTO getStudent(Long studentId) {
+    public StudentRequestDTO getStudent(Long studentId) {
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new ResourceNotFoundException("Student não encontrado com id: " + studentId));
         return StudentMapper.maptoStudentDTO(student);
@@ -94,7 +94,7 @@ public class UserServiceImpl implements UserService {
     // ---------- GET POR MATRÍCULA ----------
 
     @Override
-    public StudentDTO getStudentByMatricula(String matricula) {
+    public StudentRequestDTO getStudentByMatricula(String matricula) {
         Student student = studentRepository.findByMatricula(matricula)
                 .orElseThrow(() -> new ResourceNotFoundException("Student não encontrado com matrícula: " + matricula));
         return StudentMapper.maptoStudentDTO(student);
@@ -118,7 +118,7 @@ public class UserServiceImpl implements UserService {
     // ---------- LISTAGENS ----------
 
     @Override
-    public List<StudentDTO> getAllStudents() {
+    public List<StudentRequestDTO> getAllStudents() {
         return studentRepository.findAll().stream()
                 .map(StudentMapper::maptoStudentDTO)
                 .collect(Collectors.toList());
@@ -158,7 +158,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public StudentDTO updateStudent(Long studentId, StudentDTO updateStudent) {
+    public StudentRequestDTO updateStudent(Long studentId, StudentRequestDTO updateStudent) {
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new ResourceNotFoundException("Student not found with id " + studentId));
 
@@ -166,7 +166,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public StudentDTO updateStudentByMatricula(String matricula, StudentDTO updateStudent) {
+    public StudentRequestDTO updateStudentByMatricula(String matricula, StudentRequestDTO updateStudent) {
         Student student = studentRepository.findByMatricula(matricula)
                 .orElseThrow(() -> new ResourceNotFoundException("Student não encontrado com matrícula: " + matricula));
 
@@ -218,12 +218,10 @@ public class UserServiceImpl implements UserService {
         return DirectorMapper.maptoDirectorDTO(saved);
     }
 
-    private StudentDTO aplicarUpdateStudent(Student student, StudentDTO updateStudent) {
+    private StudentRequestDTO aplicarUpdateStudent(Student student, StudentRequestDTO updateStudent) {
         validarAnoParaGrau(updateStudent.getGrau(), updateStudent.getAno());
 
         student.setMatricula(updateStudent.getMatricula());
-        student.setGrau(updateStudent.getGrau());
-        student.setAno(updateStudent.getAno());
 
         if (updateStudent.getUser() != null) {
             User user = student.getUser();

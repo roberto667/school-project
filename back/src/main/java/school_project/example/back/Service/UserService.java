@@ -3,30 +3,30 @@ package school_project.example.back.Service;
 import java.util.List;
 
 import school_project.example.back.DTO.users.DirectorDTO;
-import school_project.example.back.DTO.users.StudentDTO;
 import school_project.example.back.DTO.users.TeacherDTO;
-import school_project.example.back.DTO.users.UserDTO;
+import school_project.example.back.DTO.users.Student.StudentRequestDTO;
+import school_project.example.back.DTO.users.User.UserDTO;
 
 public interface UserService {
-    StudentDTO createStudent(StudentDTO studentDTO);
+    StudentRequestDTO createStudent(StudentRequestDTO studentDTO);
 
     TeacherDTO createTeacher(TeacherDTO teacherDTO);
 
     DirectorDTO createDirector(DirectorDTO directorDTO);
 
-    StudentDTO getStudent(Long studentId);
+    StudentRequestDTO getStudent(Long studentId);
 
     TeacherDTO getTeacher(Long teacherId);
 
     DirectorDTO getDirector(Long directorId);
 
-    StudentDTO getStudentByMatricula(String matricula);
+    StudentRequestDTO getStudentByMatricula(String matricula);
 
     TeacherDTO getTeacherByMatricula(String matricula);
 
     DirectorDTO getDirectorByMatricula(String matricula);
 
-    List<StudentDTO> getAllStudents();
+    List<StudentRequestDTO> getAllStudents();
 
     List<TeacherDTO> getAllTeachers();
 
@@ -34,9 +34,9 @@ public interface UserService {
 
     UserDTO updateUser(Long userId, UserDTO updateUser);
 
-    StudentDTO updateStudent(Long studentId, StudentDTO updateStudent);
+    StudentRequestDTO updateStudent(Long studentId, StudentRequestDTO updateStudent);
 
-    StudentDTO updateStudentByMatricula(String matricula, StudentDTO updateStudent);
+    StudentRequestDTO updateStudentByMatricula(String matricula, StudentRequestDTO updateStudent);
 
     TeacherDTO updateTeacherByMatricula(String matricula, TeacherDTO updateTeacher);
 

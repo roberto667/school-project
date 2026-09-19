@@ -1,1 +1,0 @@
-Para criar precisa do [[Entitys]], para ter um [[DTOs]], um [[Mappers]],construir um [[Controllers]], com [[Exceptions]] e [[Services]].

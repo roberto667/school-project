@@ -14,17 +14,17 @@ import lombok.Setter;
 @Table(name = "teacher")
 public class Teacher {
 
+    // Identificador único do professor.
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // Matrícula funcional do professor.
     @Column(name = "matricula", nullable = false, unique = true)
     private String matricula;
-    @Column(name = "disciplina", nullable = false)
-    private String disciplina; // ex: "Matemática", "Português"
 
-    // Aqui está a mágica da Chave Estrangeira:
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+    // Conta de usuário vinculada ao professor.
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false, unique = true)
     private User user;
 }

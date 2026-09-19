@@ -17,22 +17,17 @@ import school_project.example.back.Entity.enums.Grau;
 @Table(name = "student")
 public class Student {
 
+    // Identificador único do aluno.
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "matricula", nullable = false, unique = true)
+    // Matrícula única do aluno para identificação acadêmica.
+    @Column(nullable = false, unique = true)
     private String matricula;
-    @Enumerated(EnumType.STRING)
-    @Column(name = "grau", nullable = false)
-    private Grau grau;
-    @Column(name = "ano", nullable = false)
-    private Integer ano;
 
-    // Aqui está a mágica da Chave Estrangeira:
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+    // Usuário que representa a conta de login do aluno.
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false, unique = true)
     private User user;
-    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
-    private List<Note> boletins;
 }

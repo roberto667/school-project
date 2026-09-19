@@ -1,4 +1,4 @@
-package school_project.example.back.DTO.users;
+package school_project.example.back.DTO.school.SchoolGrade;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,10 +10,15 @@ import school_project.example.back.Entity.enums.Grau;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class StudentDTO {
+// DTO de resposta com a etapa escolar cadastrada.
+public class SchoolGradeResponseDTO {
+
+    // Identificador único da etapa escolar.
     private Long id;
+
+    // Grau ou nível de ensino associado.
     private Grau grau;
-    private UserDTO user;
-    private String matricula;
+
+    // Ano da etapa escolar.
     private Integer ano;
 }

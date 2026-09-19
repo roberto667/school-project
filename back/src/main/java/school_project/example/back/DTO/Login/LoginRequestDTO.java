@@ -1,9 +1,7 @@
-package school_project.example.back.DTO.users;
-
+package school_project.example.back.DTO.Login;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,20 +11,15 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDTO {
-    private Long id;
+// DTO usado para receber os dados enviados no login do usuário.
+public class LoginRequestDTO {
 
-    @NotBlank(message = "Nome é obrigatório")
-    private String firstName;
-
-    @NotBlank(message = "Sobrenome é obrigatório")
-    private String lastName;
-
+    // E-mail informado pelo usuário para autenticação.
     @NotBlank(message = "Email é obrigatório")
     @Email(message = "Email inválido")
     private String email;
 
+    // Senha digitada pelo usuário para validar o login.
     @NotBlank(message = "Senha é obrigatória")
-    @Size(min = 8, message = "Senha deve ter no mínimo 8 caracteres")
     private String password;
 }

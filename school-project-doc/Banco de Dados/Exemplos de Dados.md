@@ -1,0 +1,5 @@
+Temos a parte dos Usuários [[USERS]]
+Temos a parte da Matérias em [[SUBJECT]]
+Temos a parte dos Anos em [[SCHOOL_GRADE]] 
+Temos a parte das salas em [[CLASSROOM]] 
+[[ENROLLMENT]]

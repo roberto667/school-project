@@ -1,4 +1,4 @@
-package school_project.example.back.DTO.users;
+package school_project.example.back.DTO.users.User;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,10 +9,17 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-// Para respostas (saída) - sem senha
+// DTO usado para retornos de usuário sem expor a senha.
 public class UserResponseDTO {
+    // Identificador único do usuário.
     private Long id;
+
+    // Primeiro nome do usuário.
     private String firstName;
+
+    // Sobrenome do usuário.
     private String lastName;
+
+    // E-mail cadastrado do usuário.
     private String email;
 }

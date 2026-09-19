@@ -2,7 +2,7 @@ package school_project.example.back.Service;
 
 import java.util.List;
 
-import school_project.example.back.DTO.NoteDTO;
+import school_project.example.back.DTO.Grade.NoteDTO;
 
 public interface NoteService {
     NoteDTO createNote(NoteDTO noteDTO);

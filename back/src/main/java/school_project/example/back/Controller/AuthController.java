@@ -5,8 +5,8 @@ import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import school_project.example.back.DTO.LoginRequestDTO;
-import school_project.example.back.DTO.LoginResponseDTO;
+import school_project.example.back.DTO.Login.LoginRequestDTO;
+import school_project.example.back.DTO.Login.LoginResponseDTO;
 import school_project.example.back.Service.AuthService;
 
 @CrossOrigin("*")

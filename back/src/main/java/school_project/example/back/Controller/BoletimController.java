@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import lombok.AllArgsConstructor;
-import school_project.example.back.DTO.NoteDTO;
+import school_project.example.back.DTO.Grade.NoteDTO;
 import school_project.example.back.Service.NoteService;
 
 @CrossOrigin("*")

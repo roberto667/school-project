@@ -1,7 +1,5 @@
 package school_project.example.back.Entity;
 
-import java.util.List;
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,15 +11,15 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "classes")
-public class Classes {
+@Table(name = "subjects")
+public class Subject {
+
+    // Identificador único da disciplina.
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "nome", nullable = false)
+
+    // Nome da disciplina, como Matemática, História ou Português.
+    @Column(nullable = false, unique = true)
     private String nome;
-    @OneToMany(mappedBy = "class", cascade = CascadeType.ALL)
-    private List<Student> students;
-    @OneToMany(mappedBy = "class", cascade = CascadeType.ALL)
-    private List<Teacher> teachers;
 }

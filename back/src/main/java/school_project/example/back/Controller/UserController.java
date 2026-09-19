@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import school_project.example.back.DTO.users.DirectorDTO;
-import school_project.example.back.DTO.users.StudentDTO;
 import school_project.example.back.DTO.users.TeacherDTO;
-import school_project.example.back.DTO.users.UserDTO;
+import school_project.example.back.DTO.users.Student.StudentRequestDTO;
+import school_project.example.back.DTO.users.User.UserDTO;
 import school_project.example.back.Service.UserService;
 
 @CrossOrigin("*")
@@ -32,41 +32,42 @@ public class UserController {
     // ---------- STUDENT ----------
 
     @PostMapping("/students")
-    public ResponseEntity<StudentDTO> createStudent(@Valid @RequestBody StudentDTO studentDTO) {
-        StudentDTO created = userService.createStudent(studentDTO);
+    public ResponseEntity<StudentRequestDTO> createStudent(@Valid @RequestBody StudentRequestDTO studentDTO) {
+        StudentRequestDTO created = userService.createStudent(studentDTO);
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 
     @PutMapping("/students/update/{id}")
-    public ResponseEntity<StudentDTO> updateStudent(@PathVariable Long id, @RequestBody StudentDTO studentDTO) {
-        StudentDTO updated = userService.updateStudent(id, studentDTO);
+    public ResponseEntity<StudentRequestDTO> updateStudent(@PathVariable Long id,
+            @RequestBody StudentRequestDTO studentDTO) {
+        StudentRequestDTO updated = userService.updateStudent(id, studentDTO);
         return ResponseEntity.ok(updated);
     }
 
     @GetMapping("/students/{id}")
-    public ResponseEntity<StudentDTO> getStudent(@PathVariable Long id) {
-        StudentDTO student = userService.getStudent(id);
+    public ResponseEntity<StudentRequestDTO> getStudent(@PathVariable Long id) {
+        StudentRequestDTO student = userService.getStudent(id);
         return ResponseEntity.ok(student);
     }
 
     @GetMapping("/students")
-    public ResponseEntity<List<StudentDTO>> getAllStudents() {
-        List<StudentDTO> students = userService.getAllStudents();
+    public ResponseEntity<List<StudentRequestDTO>> getAllStudents() {
+        List<StudentRequestDTO> students = userService.getAllStudents();
         return ResponseEntity.ok(students);
     }
 
     // ---------- STUDENT (por matrícula) ----------
 
     @GetMapping("/students/matricula/{matricula}")
-    public ResponseEntity<StudentDTO> getStudentByMatricula(@PathVariable String matricula) {
-        StudentDTO student = userService.getStudentByMatricula(matricula);
+    public ResponseEntity<StudentRequestDTO> getStudentByMatricula(@PathVariable String matricula) {
+        StudentRequestDTO student = userService.getStudentByMatricula(matricula);
         return ResponseEntity.ok(student);
     }
 
     @PutMapping("/students/matricula/{matricula}")
-    public ResponseEntity<StudentDTO> updateStudentByMatricula(
-            @PathVariable String matricula, @RequestBody StudentDTO studentDTO) {
-        StudentDTO updated = userService.updateStudentByMatricula(matricula, studentDTO);
+    public ResponseEntity<StudentRequestDTO> updateStudentByMatricula(
+            @PathVariable String matricula, @RequestBody StudentRequestDTO studentDTO) {
+        StudentRequestDTO updated = userService.updateStudentByMatricula(matricula, studentDTO);
         return ResponseEntity.ok(updated);
     }
 

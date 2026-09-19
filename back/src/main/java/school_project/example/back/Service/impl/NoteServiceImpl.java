@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import lombok.AllArgsConstructor;
-import school_project.example.back.DTO.NoteDTO;
+import school_project.example.back.DTO.Grade.NoteDTO;
 import school_project.example.back.Entity.Note;
 import school_project.example.back.Entity.Student;
 import school_project.example.back.Exception.ResourceNotFoundException;
