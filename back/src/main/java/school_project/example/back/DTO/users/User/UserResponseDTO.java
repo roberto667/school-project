@@ -22,4 +22,5 @@ public class UserResponseDTO {
 
     // E-mail cadastrado do usuário.
     private String email;
+    private Boolean active;
 }

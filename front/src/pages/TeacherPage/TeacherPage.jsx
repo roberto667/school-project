@@ -1,4 +1,5 @@
-import { useAuth } from "../../context/AuthContext";
+// Apresenta a área inicial do professor e oferece o encerramento da sessão.
+import { useAuth } from "../../context/useAuth";
 
 export default function TeacherPage() {
   const { auth, signOut } = useAuth();

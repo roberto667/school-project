@@ -1,26 +1,41 @@
 package school_project.example.back.Mapper;
 
-import school_project.example.back.DTO.users.DirectorDTO;
+import school_project.example.back.DTO.users.Director.DirectorRequestDTO;
+import school_project.example.back.DTO.users.Director.DirectorResponseDTO;
 import school_project.example.back.Entity.Director;
 
+/**
+ * Converte a entidade Director para DTO e vice-versa,
+ * cuidando da matrícula e do usuário associado ao diretor.
+ */
 public class DirectorMapper {
-    public static DirectorDTO maptoDirectorDTO(Director director) {
+
+    public static DirectorResponseDTO mapToResponseDTO(Director director) {
+
         if (director == null)
             return null;
-        DirectorDTO dto = new DirectorDTO();
+
+        DirectorResponseDTO dto = new DirectorResponseDTO();
+
         dto.setId(director.getId());
-        dto.setUser(UserMapper.maptoUserDTO(director.getUser()));
         dto.setMatricula(director.getMatricula());
+        dto.setUser(
+                UserMapper.mapToResponseDTO(director.getUser()));
+
         return dto;
     }
 
-    public static Director maptoDirector(DirectorDTO directorDTO) {
-        if (directorDTO == null)
+    public static Director mapToEntity(DirectorRequestDTO dto) {
+
+        if (dto == null)
             return null;
+
         Director director = new Director();
-        director.setId(directorDTO.getId());
-        director.setMatricula(directorDTO.getMatricula());
-        director.setUser(UserMapper.maptoUser(directorDTO.getUser()));
+
+        director.setMatricula(dto.getMatricula());
+        director.setUser(
+                UserMapper.mapToEntity(dto.getUser()));
+
         return director;
     }
 }

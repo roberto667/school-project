@@ -28,7 +28,6 @@ public class UserRequestDTO {
     private String email;
 
     // Senha para acesso ao sistema. Deve ter ao menos 8 caracteres.
-    @NotBlank(message = "Senha é obrigatória")
     @Size(min = 8, message = "Senha deve ter no mínimo 8 caracteres")
     private String password;
 }

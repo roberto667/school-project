@@ -16,5 +16,5 @@ public class SubjectResponseDTO {
     private Long id;
 
     // Nome da disciplina cadastrada.
-    private String name;
+    private String nome;
 }

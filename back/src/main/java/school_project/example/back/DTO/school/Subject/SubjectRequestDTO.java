@@ -15,5 +15,5 @@ public class SubjectRequestDTO {
 
     // Nome da disciplina, como Matemática, Português ou História.
     @NotBlank(message = "Nome da disciplina é obrigatório")
-    private String name;
+    private String nome;
 }

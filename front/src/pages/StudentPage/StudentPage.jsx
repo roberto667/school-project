@@ -1,4 +1,5 @@
-import { useAuth } from "../../context/AuthContext";
+// Apresenta a área inicial do aluno e oferece o encerramento da sessão.
+import { useAuth } from "../../context/useAuth";
 
 export default function StudentPage() {
   const { auth, signOut } = useAuth();

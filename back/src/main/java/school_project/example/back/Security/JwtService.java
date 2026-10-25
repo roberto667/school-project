@@ -24,6 +24,7 @@ public class JwtService {
     private long expiration;
 
     private SecretKey getSigningKey() {
+
         return Keys.hmacShaKeyFor(
                 secretKey.getBytes(StandardCharsets.UTF_8));
     }
@@ -34,13 +35,18 @@ public class JwtService {
                 .subject(userDetails.getUsername())
                 .issuedAt(new Date())
                 .expiration(
-                        new Date(System.currentTimeMillis() + expiration))
+                        new Date(
+                                System.currentTimeMillis()
+                                        + expiration))
                 .signWith(getSigningKey())
                 .compact();
     }
 
     public String extractEmail(String token) {
-        return extractClaim(token, Claims::getSubject);
+
+        return extractClaim(
+                token,
+                Claims::getSubject);
     }
 
     public boolean isTokenValid(
@@ -54,6 +60,7 @@ public class JwtService {
     }
 
     private boolean isTokenExpired(String token) {
+
         return extractClaim(
                 token,
                 Claims::getExpiration).before(new Date());

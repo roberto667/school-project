@@ -1,6 +1,8 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+// Define as rotas públicas e as áreas protegidas do sistema escolar.
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import PrivateRoute from "./components/PrivateRoute";
+import ErrorPage from "./components/ui/error_page/ErrorPage";
 import LoginPage from "./pages/LoginPage/LoginPage";
 import TeacherPage from "./pages/TeacherPage/TeacherPage";
 import StudentPage from "./pages/StudentPage/StudentPage";
@@ -11,6 +13,12 @@ export default function App() {
     <AuthProvider>
       <BrowserRouter>
         <Routes>
+          <Route path="/403" element={<ErrorPage status={403} />} />
+
+          <Route path="/500" element={<ErrorPage status={500} />} />
+
+          <Route path="/503" element={<ErrorPage status={503} />} />
+
           <Route path="/login" element={<LoginPage />} />
 
           <Route
@@ -39,7 +47,7 @@ export default function App() {
             }
           />
 
-          <Route path="*" element={<Navigate to="/login" replace />} />
+          <Route path="*" element={<ErrorPage status={404} />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

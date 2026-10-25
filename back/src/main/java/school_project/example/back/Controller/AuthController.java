@@ -10,16 +10,18 @@ import school_project.example.back.DTO.Login.LoginResponseDTO;
 import school_project.example.back.Service.AuthService;
 
 @CrossOrigin("*")
-@RequiredArgsConstructor
 @RestController
-@RequestMapping("api/auth")
+@RequestMapping("/api/auth")
+@RequiredArgsConstructor
 public class AuthController {
 
     private final AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDTO> login(@Valid @RequestBody LoginRequestDTO loginRequestDTO) {
-        LoginResponseDTO response = authService.login(loginRequestDTO);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<LoginResponseDTO> login(
+            @Valid @RequestBody LoginRequestDTO dto) {
+
+        return ResponseEntity.ok(
+                authService.login(dto));
     }
 }

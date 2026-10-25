@@ -1,34 +1,41 @@
 package school_project.example.back.Mapper;
 
-import school_project.example.back.DTO.users.TeacherDTO;
+import school_project.example.back.DTO.users.Teacher.TeacherRequestDTO;
+import school_project.example.back.DTO.users.Teacher.TeacherResponseDTO;
 import school_project.example.back.Entity.Teacher;
 
+/**
+ * Converte a entidade Teacher para DTO e vice-versa,
+ * incluindo a matrícula do professor e o usuário associado.
+ */
 public class TeacherMapper {
-    public static TeacherDTO maptoTeacherDTO(Teacher teacher) {
+
+    public static TeacherResponseDTO mapToResponseDTO(Teacher teacher) {
+
         if (teacher == null)
             return null;
-        TeacherDTO dto = new TeacherDTO();
+
+        TeacherResponseDTO dto = new TeacherResponseDTO();
 
         dto.setId(teacher.getId());
-        dto.setUser(UserMapper.maptoUserDTO(teacher.getUser()));
         dto.setMatricula(teacher.getMatricula());
-        dto.setDisciplina(teacher.getDisciplina());
+        dto.setUser(
+                UserMapper.mapToResponseDTO(teacher.getUser()));
 
         return dto;
     }
 
-    public static Teacher maptoTeacher(TeacherDTO teacherDTO) {
-        if (teacherDTO == null)
+    public static Teacher mapToEntity(TeacherRequestDTO dto) {
+
+        if (dto == null)
             return null;
+
         Teacher teacher = new Teacher();
 
-        teacher.setId(teacherDTO.getId());
-        teacher.setMatricula(teacherDTO.getMatricula());
-        teacher.setUser(UserMapper.maptoUser(teacherDTO.getUser()));
-        teacher.setDisciplina(teacherDTO.getDisciplina());
+        teacher.setMatricula(dto.getMatricula());
+        teacher.setUser(
+                UserMapper.mapToEntity(dto.getUser()));
 
         return teacher;
-
     }
-
 }

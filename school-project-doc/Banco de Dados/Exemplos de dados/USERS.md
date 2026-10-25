@@ -1,34 +1,31 @@
-USERS
-┌────┬────────────┬───────────┬───────────────────────┬──────────────────┐
-│ id │ first_name │ last_name │ email_id              │ password         │
-├────┼────────────┼───────────┼───────────────────────┼──────────────────┤
-│ 1  │ João       │ Silva     │ joao@email.com        │ $2a$10$...       │
-│ 2  │ Carlos     │ Santos    │ carlos@email.com      │ $2a$10$...       │
-│ 3  │ Roberto    │ Souza     │ roberto@email.com     │ $2a$10$...       │
-│ 4  │ Maria      │ Lima      │ maria@email.com       │ $2a$10$...       │
-└────┴────────────┴───────────┴───────────────────────┴──────────────────┘
+# Usuários e perfis
 
-STUDENT
-┌────┬───────────┬─────────┐
-│ id │ matricula │ user_id │
-├────┼───────────┼─────────┤
-│ 1  │ A20260001 │    1    │
-│ 2  │ A20260002 │    4    │
-└────┴───────────┴─────────┘
-                         │
-                         └── FK → users.id
+Exemplo conceitual com dados totalmente fictícios. Senhas são omitidas deliberadamente.
 
-TEACHER
-┌────┬───────────┬─────────┐
-│ id │ matricula │ user_id │
-├────┼───────────┼─────────┤
-│ 1  │ P0001     │    2    │
-│ 2  │ P0002     │    5    │
-└────┴───────────┴─────────┘
+## `users`
 
-DIRECTOR
-┌────┬───────────┬─────────┐
-│ id │ matricula │ user_id │
-├────┼───────────┼─────────┤
-│ 1  │ D0001     │    3    │
-└────┴───────────┴─────────┘
+| id | first_name | last_name | email_id |
+|---:|---|---|---|
+| 1 | Ana | Silva | ana.aluna@example.test |
+| 2 | Bruno | Santos | bruno.professor@example.test |
+| 3 | Carla | Lima | carla.diretora@example.test |
+
+## `student`
+
+| id | matricula | user_id |
+|---:|---|---:|
+| 1 | A20260001 | 1 |
+
+## `teacher`
+
+| id | matricula | user_id |
+|---:|---|---:|
+| 1 | P20260001 | 2 |
+
+## `director`
+
+| id | matricula | user_id |
+|---:|---|---:|
+| 1 | D20260001 | 3 |
+
+Cada perfil referencia uma conta em `users`. No banco real a senha é armazenada com hash pelo backend; não use senha em texto puro em documentação, amostras compartilhadas ou commits.

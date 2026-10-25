@@ -27,34 +27,51 @@ public class AuthServiceImpl implements AuthService {
     private final JwtService jwtService;
 
     @Override
-    public LoginResponseDTO login(LoginRequestDTO loginRequestDTO) {
+    public LoginResponseDTO login(LoginRequestDTO dto) {
+
         try {
+
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
-                            loginRequestDTO.getEmail(),
-                            loginRequestDTO.getPassword()));
+                            dto.getEmail(),
+                            dto.getPassword()));
+
         } catch (BadCredentialsException ex) {
-            throw new InvalidCredentialsException("Email ou senha inválidos");
+
+            throw new InvalidCredentialsException(
+                    "Email ou senha inválidos.");
         }
 
-        User user = userRepository.findByEmail(loginRequestDTO.getEmail())
-                .orElseThrow(() -> new InvalidCredentialsException("Email ou senha inválidos"));
+        User user = userRepository
+                .findByEmail(dto.getEmail())
+                .orElseThrow(() -> new InvalidCredentialsException(
+                        "Email ou senha inválidos."));
 
-        UserDetails userDetails = userDetailsService.loadUserByUsername(user.getEmail());
+        UserDetails userDetails = userDetailsService.loadUserByUsername(
+                user.getEmail());
+
         String token = jwtService.generateToken(userDetails);
 
-        String role = "NONE";
-        if (user.getDirector() != null)
+        String role;
+
+        if (user.getDirector() != null) {
             role = "DIRECTOR";
-        else if (user.getTeacher() != null)
+        } else if (user.getTeacher() != null) {
             role = "TEACHER";
-        else if (user.getStudent() != null)
+        } else if (user.getStudent() != null) {
             role = "STUDENT";
+        } else {
+            throw new InvalidCredentialsException(
+                    "Usuário não possui perfil associado.");
+        }
 
         LoginResponseDTO response = new LoginResponseDTO();
+
         response.setToken(token);
-        response.setUser(UserMapper.maptoUserResponseDTO(user));
+        response.setUser(
+                UserMapper.mapToResponseDTO(user));
         response.setRole(role);
+
         return response;
     }
 }

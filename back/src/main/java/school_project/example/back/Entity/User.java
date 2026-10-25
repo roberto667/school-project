@@ -33,6 +33,8 @@ public class User {
     // Senha do usuário, geralmente armazenada de forma segura.
     @Column(name = "password", nullable = false)
     private String password;
+    @Column(name = "active", nullable = false)
+    private Boolean active = true;
 
     // Perfil do aluno associado a este usuário.
     @OneToOne(mappedBy = "user")

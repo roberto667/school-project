@@ -1,30 +1,17 @@
 package school_project.example.back.Service.impl;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import school_project.example.back.DTO.users.DirectorDTO;
-import school_project.example.back.DTO.users.TeacherDTO;
-import school_project.example.back.DTO.users.Student.StudentRequestDTO;
-import school_project.example.back.DTO.users.User.UserDTO;
-import school_project.example.back.Entity.Director;
-import school_project.example.back.Entity.Student;
-import school_project.example.back.Entity.Teacher;
+import school_project.example.back.DTO.users.User.UserResponseDTO;
+import school_project.example.back.DTO.users.User.UserUpdateDTO;
 import school_project.example.back.Entity.User;
-import school_project.example.back.Entity.enums.Grau;
-import school_project.example.back.Exception.InvalidDataException;
+import school_project.example.back.Exception.DuplicateResourceException;
 import school_project.example.back.Exception.ResourceNotFoundException;
-import school_project.example.back.Mapper.DirectorMapper;
-import school_project.example.back.Mapper.StudentMapper;
-import school_project.example.back.Mapper.TeacherMapper;
 import school_project.example.back.Mapper.UserMapper;
-import school_project.example.back.Repository.DirectorRepository;
-import school_project.example.back.Repository.StudentRepository;
-import school_project.example.back.Repository.TeacherRepository;
 import school_project.example.back.Repository.UserRepository;
 import school_project.example.back.Service.UserService;
 
@@ -33,272 +20,75 @@ import school_project.example.back.Service.UserService;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final StudentRepository studentRepository;
-    private final TeacherRepository teacherRepository;
-    private final DirectorRepository directorRepository;
-    private final PasswordEncoder passwordEncoder;
-
-    // ---------- CREATE ----------
 
     @Override
-    public StudentRequestDTO createStudent(StudentRequestDTO studentDTO) {
-        validarAnoParaGrau(studentDTO.getGrau(), studentDTO.getAno());
+    @Transactional(readOnly = true)
+    public UserResponseDTO getUser(Long userId) {
 
-        studentDTO.getUser().setPassword(
-                passwordEncoder.encode(studentDTO.getUser().getPassword()));
+        User user = findUser(userId);
 
-        Student student = StudentMapper.maptoStudent(studentDTO);
-        Student savedStudent = studentRepository.save(student);
-        return StudentMapper.maptoStudentDTO(savedStudent);
+        return UserMapper.mapToResponseDTO(user);
     }
 
     @Override
-    public TeacherDTO createTeacher(TeacherDTO teacherDTO) {
-        Teacher teacher = TeacherMapper.maptoTeacher(teacherDTO);
-        teacher.getUser().setPassword(passwordEncoder.encode(teacher.getUser().getPassword()));
-        Teacher saved = teacherRepository.save(teacher);
-        return TeacherMapper.maptoTeacherDTO(saved);
+    @Transactional(readOnly = true)
+    public List<UserResponseDTO> getAllUsers() {
+
+        return userRepository.findAll()
+                .stream()
+                .map(UserMapper::mapToResponseDTO)
+                .toList();
     }
 
     @Override
-    public DirectorDTO createDirector(DirectorDTO directorDTO) {
-        Director director = DirectorMapper.maptoDirector(directorDTO);
-        director.getUser().setPassword(passwordEncoder.encode(director.getUser().getPassword()));
-        Director saved = directorRepository.save(director);
-        return DirectorMapper.maptoDirectorDTO(saved);
-    }
+    @Transactional
+    public UserResponseDTO updateUser(
+            Long userId,
+            UserUpdateDTO dto) {
 
-    // ---------- GET POR ID ----------
+        User user = findUser(userId);
 
-    @Override
-    public StudentRequestDTO getStudent(Long studentId) {
-        Student student = studentRepository.findById(studentId)
-                .orElseThrow(() -> new ResourceNotFoundException("Student não encontrado com id: " + studentId));
-        return StudentMapper.maptoStudentDTO(student);
-    }
+        if (dto.getEmail() != null
+                && !dto.getEmail().equalsIgnoreCase(user.getEmail())
+                && userRepository.existsByEmail(dto.getEmail())) {
 
-    @Override
-    public TeacherDTO getTeacher(Long teacherId) {
-        Teacher teacher = teacherRepository.findById(teacherId)
-                .orElseThrow(() -> new ResourceNotFoundException("Teacher não encontrado com id: " + teacherId));
-        return TeacherMapper.maptoTeacherDTO(teacher);
-    }
+            throw new DuplicateResourceException(
+                    "Já existe um usuário com esse email.");
+        }
 
-    @Override
-    public DirectorDTO getDirector(Long directorId) {
-        Director director = directorRepository.findById(directorId)
-                .orElseThrow(() -> new ResourceNotFoundException("Director não encontrado com id: " + directorId));
-        return DirectorMapper.maptoDirectorDTO(director);
-    }
+        if (dto.getFirstName() != null
+                && !dto.getFirstName().isBlank()) {
+            user.setFirstName(dto.getFirstName());
+        }
 
-    // ---------- GET POR MATRÍCULA ----------
+        if (dto.getLastName() != null
+                && !dto.getLastName().isBlank()) {
+            user.setLastName(dto.getLastName());
+        }
 
-    @Override
-    public StudentRequestDTO getStudentByMatricula(String matricula) {
-        Student student = studentRepository.findByMatricula(matricula)
-                .orElseThrow(() -> new ResourceNotFoundException("Student não encontrado com matrícula: " + matricula));
-        return StudentMapper.maptoStudentDTO(student);
-    }
-
-    @Override
-    public TeacherDTO getTeacherByMatricula(String matricula) {
-        Teacher teacher = teacherRepository.findByMatricula(matricula)
-                .orElseThrow(() -> new ResourceNotFoundException("Teacher não encontrado com matrícula: " + matricula));
-        return TeacherMapper.maptoTeacherDTO(teacher);
-    }
-
-    @Override
-    public DirectorDTO getDirectorByMatricula(String matricula) {
-        Director director = directorRepository.findByMatricula(matricula)
-                .orElseThrow(
-                        () -> new ResourceNotFoundException("Director não encontrado com matrícula: " + matricula));
-        return DirectorMapper.maptoDirectorDTO(director);
-    }
-
-    // ---------- LISTAGENS ----------
-
-    @Override
-    public List<StudentRequestDTO> getAllStudents() {
-        return studentRepository.findAll().stream()
-                .map(StudentMapper::maptoStudentDTO)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<TeacherDTO> getAllTeachers() {
-        return teacherRepository.findAll().stream()
-                .map(TeacherMapper::maptoTeacherDTO)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<DirectorDTO> getAllDirectors() {
-        return directorRepository.findAll().stream()
-                .map(DirectorMapper::maptoDirectorDTO)
-                .collect(Collectors.toList());
-    }
-
-    // ---------- UPDATE ----------
-
-    @Override
-    public UserDTO updateUser(Long userId, UserDTO updateUser) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("User não encontrado com id: " + userId));
-
-        user.setFirstName(updateUser.getFirstName());
-        user.setLastName(updateUser.getLastName());
-        user.setEmail(updateUser.getEmail());
-
-        if (updateUser.getPassword() != null && !updateUser.getPassword().isBlank()) {
-            user.setPassword(passwordEncoder.encode(updateUser.getPassword()));
+        if (dto.getEmail() != null
+                && !dto.getEmail().isBlank()) {
+            user.setEmail(dto.getEmail());
         }
 
         User saved = userRepository.save(user);
-        return UserMapper.maptoUserDTO(saved);
+
+        return UserMapper.mapToResponseDTO(saved);
     }
 
     @Override
-    public StudentRequestDTO updateStudent(Long studentId, StudentRequestDTO updateStudent) {
-        Student student = studentRepository.findById(studentId)
-                .orElseThrow(() -> new ResourceNotFoundException("Student not found with id " + studentId));
-
-        return aplicarUpdateStudent(student, updateStudent);
-    }
-
-    @Override
-    public StudentRequestDTO updateStudentByMatricula(String matricula, StudentRequestDTO updateStudent) {
-        Student student = studentRepository.findByMatricula(matricula)
-                .orElseThrow(() -> new ResourceNotFoundException("Student não encontrado com matrícula: " + matricula));
-
-        return aplicarUpdateStudent(student, updateStudent);
-    }
-
-    @Override
-    public TeacherDTO updateTeacherByMatricula(String matricula, TeacherDTO updateTeacher) {
-        Teacher teacher = teacherRepository.findByMatricula(matricula)
-                .orElseThrow(() -> new ResourceNotFoundException("Teacher não encontrado com matrícula: " + matricula));
-
-        teacher.setMatricula(updateTeacher.getMatricula());
-
-        if (updateTeacher.getUser() != null) {
-            User user = teacher.getUser();
-            user.setFirstName(updateTeacher.getUser().getFirstName());
-            user.setLastName(updateTeacher.getUser().getLastName());
-            user.setEmail(updateTeacher.getUser().getEmail());
-
-            if (updateTeacher.getUser().getPassword() != null && !updateTeacher.getUser().getPassword().isBlank()) {
-                user.setPassword(passwordEncoder.encode(updateTeacher.getUser().getPassword()));
-            }
-        }
-
-        Teacher saved = teacherRepository.save(teacher);
-        return TeacherMapper.maptoTeacherDTO(saved);
-    }
-
-    @Override
-    public DirectorDTO updateDirectorByMatricula(String matricula, DirectorDTO updateDirector) {
-        Director director = directorRepository.findByMatricula(matricula)
-                .orElseThrow(
-                        () -> new ResourceNotFoundException("Director não encontrado com matrícula: " + matricula));
-
-        director.setMatricula(updateDirector.getMatricula());
-
-        if (updateDirector.getUser() != null) {
-            User user = director.getUser();
-            user.setFirstName(updateDirector.getUser().getFirstName());
-            user.setLastName(updateDirector.getUser().getLastName());
-            user.setEmail(updateDirector.getUser().getEmail());
-
-            if (updateDirector.getUser().getPassword() != null && !updateDirector.getUser().getPassword().isBlank()) {
-                user.setPassword(passwordEncoder.encode(updateDirector.getUser().getPassword()));
-            }
-        }
-
-        Director saved = directorRepository.save(director);
-        return DirectorMapper.maptoDirectorDTO(saved);
-    }
-
-    private StudentRequestDTO aplicarUpdateStudent(Student student, StudentRequestDTO updateStudent) {
-        validarAnoParaGrau(updateStudent.getGrau(), updateStudent.getAno());
-
-        student.setMatricula(updateStudent.getMatricula());
-
-        if (updateStudent.getUser() != null) {
-            User user = student.getUser();
-            user.setFirstName(updateStudent.getUser().getFirstName());
-            user.setLastName(updateStudent.getUser().getLastName());
-            user.setEmail(updateStudent.getUser().getEmail());
-
-            if (updateStudent.getUser().getPassword() != null && !updateStudent.getUser().getPassword().isBlank()) {
-                user.setPassword(passwordEncoder.encode(updateStudent.getUser().getPassword()));
-            }
-        }
-
-        Student saved = studentRepository.save(student);
-        return StudentMapper.maptoStudentDTO(saved);
-    }
-
-    // ---------- DELETE ----------
-
-    @Override
+    @Transactional
     public void deleteUser(Long userId) {
-        if (!userRepository.existsById(userId)) {
-            throw new ResourceNotFoundException("User não encontrado com id: " + userId);
-        }
-        userRepository.deleteById(userId);
-    }
 
-    @Override
-    public void deleteStudentByMatricula(String matricula) {
-        Student student = studentRepository.findByMatricula(matricula)
-                .orElseThrow(() -> new ResourceNotFoundException("Student não encontrado com matrícula: " + matricula));
+        User user = findUser(userId);
 
-        User user = student.getUser();
-        studentRepository.delete(student);
         userRepository.delete(user);
     }
 
-    @Override
-    public void deleteTeacherByMatricula(String matricula) {
-        Teacher teacher = teacherRepository.findByMatricula(matricula)
-                .orElseThrow(() -> new ResourceNotFoundException("Teacher não encontrado com matrícula: " + matricula));
+    private User findUser(Long userId) {
 
-        User user = teacher.getUser();
-        teacherRepository.delete(teacher);
-        userRepository.delete(user);
-    }
-
-    @Override
-    public void deleteDirectorByMatricula(String matricula) {
-        Director director = directorRepository.findByMatricula(matricula)
-                .orElseThrow(
-                        () -> new ResourceNotFoundException("Director não encontrado com matrícula: " + matricula));
-
-        User user = director.getUser();
-        directorRepository.delete(director);
-        userRepository.delete(user);
-    }
-
-    // ---------- VALIDAÇÃO ----------
-
-    private void validarAnoParaGrau(Grau grau, Integer ano) {
-        if (grau == null) {
-            throw new InvalidDataException("O grau é obrigatório");
-        }
-        if (ano == null) {
-            throw new InvalidDataException("O ano é obrigatório");
-        }
-
-        int maxAno = switch (grau) {
-            case FUNDAMENTAL_1 -> 5;
-            case FUNDAMENTAL_2 -> 4; // 6º ao 9º ano = 1 a 4
-            case MEDIO -> 3;
-            case GRADUACAO -> 20; // período/semestre, mais flexível
-        };
-
-        if (ano < 1 || ano > maxAno) {
-            throw new InvalidDataException(
-                    "Ano " + ano + " inválido para o grau " + grau + ". Valores aceitos: 1 a " + maxAno);
-        }
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Usuário não encontrado com id: " + userId));
     }
 }

@@ -4,39 +4,42 @@ import school_project.example.back.DTO.users.User.UserRequestDTO;
 import school_project.example.back.DTO.users.User.UserResponseDTO;
 import school_project.example.back.Entity.User;
 
+/**
+ * Converte a entidade User para DTO e vice-versa,
+ * mapeando os dados básicos do usuário e sua autenticação.
+ */
 public class UserMapper {
-    public static UserRequestDTO maptoUserRequestDTO(User user) {
+
+    public static UserResponseDTO mapToResponseDTO(User user) {
+
         if (user == null)
             return null;
-        UserRequestDTO dto = new UserRequestDTO();
-        dto.setFirstName(user.getFirstName());
-        dto.setLastName(user.getLastName());
-        dto.setEmail(user.getEmail());
-        // geralmente NÃO se retorna a senha em DTOs de saída
-        return dto;
 
-    }
-
-    public static UserResponseDTO maptoUserResponseDTO(User user) {
-        if (user == null)
-            return null;
         UserResponseDTO dto = new UserResponseDTO();
+
         dto.setId(user.getId());
         dto.setFirstName(user.getFirstName());
         dto.setLastName(user.getLastName());
         dto.setEmail(user.getEmail());
+        dto.setActive(user.getActive());
+
+
         return dto;
     }
 
-    public static User maptoUser(UserRequestDTO userDTO) {
-        if (userDTO == null)
+    public static User mapToEntity(UserRequestDTO dto) {
+
+        if (dto == null)
             return null;
+
         User user = new User();
-        user.setFirstName(userDTO.getFirstName());
-        user.setLastName(userDTO.getLastName());
-        user.setEmail(userDTO.getEmail());
-        user.setPassword(userDTO.getPassword());
+
+        user.setFirstName(dto.getFirstName());
+        user.setLastName(dto.getLastName());
+        user.setEmail(dto.getEmail());
+        user.setPassword(dto.getPassword());
+        user.setActive(true);
+
         return user;
     }
-
 }

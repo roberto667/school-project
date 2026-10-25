@@ -32,8 +32,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         String authHeader = request.getHeader("Authorization");
 
-        // Não existe token
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+        if (authHeader == null
+                || !authHeader.startsWith("Bearer ")) {
+
             filterChain.doFilter(request, response);
             return;
         }
@@ -49,9 +50,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                             .getContext()
                             .getAuthentication() == null) {
 
-                UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+                UserDetails userDetails = userDetailsService
+                        .loadUserByUsername(email);
 
-                if (jwtService.isTokenValid(token, userDetails)) {
+                if (jwtService.isTokenValid(
+                        token,
+                        userDetails)) {
 
                     UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                             userDetails,
@@ -68,10 +72,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 }
             }
 
-        } catch (Exception e) {
-
-            // JWT inválido, expirado ou usuário inexistente.
-            // A requisição continua sem autenticação.
+        } catch (Exception ignored) {
+            // Token inválido/expirado:
+            // continua sem autenticação.
         }
 
         filterChain.doFilter(request, response);
